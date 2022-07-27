@@ -1,0 +1,52 @@
+Label f;
+f.p=fontsize(0.5); 
+xaxis(-3,3,Ticks(f,1.0)); 
+yaxis(-3,3,Ticks(f,1.0)); 
+draw((-3,3)--(-3,-3),rgb(120,120,120)+linewidth(0.1));
+for (int i = 1; i <= 6; ++i){
+	for (int j = 1; j <= 6; ++j){
+    	dot((0.5*i,0.5*j),black+2);
+ 		dot((-0.5*i,0.5*j),black+2);
+        dot((-0.5*i,-0.5*j),black+2);
+        dot((0.5*i,-0.5*j),black+2);
+ 	}
+}
+
+real slope(real x, real y){ // Differential equation.
+	return (x*x-4*x*y+y*y) / 4;
+}
+
+void drawLine(real x, real y, real length){
+	real slope1 = slope(x,y);
+	real x2 = length*cos(atan(slope1))+x;
+    real y2 = length*sin(atan(slope1))+y;
+    real x1 = -1*length*cos(atan(slope1))+x;
+    real y1 = -1*length*sin(atan(slope1))+y;
+    
+    draw((x1,y1)--(x2,y2),black+linewidth(0.8));
+}
+
+for (int i = -6; i <= 6; ++i){
+	for (int j = -6; j <= 6; ++j){
+    	drawLine(0.5*i,0.5*j,0.2);
+    }
+}
+
+real x1 = 0;
+real y1 = 1;
+real interval = 3/35;
+
+for (int i = 0; i < 40; ++i){
+	draw((x1,y1)--(x1+interval,y1+interval*slope(x1,y1)),red+linewidth(0.8));
+    y1 = y1+interval*slope(x1,y1);
+    x1 = x1+interval;
+}
+
+x1 = 0; // X-value of the particular solution.
+y1 = 1; // Y-value of the particular solution.
+
+for (int i = 0; i < 40; ++i){
+	draw((x1,y1)--(x1+interval,y1+interval*slope(x1,y1)),red+linewidth(0.8));
+    y1 = y1-interval*slope(x1,y1);
+    x1 = x1-interval;
+}
